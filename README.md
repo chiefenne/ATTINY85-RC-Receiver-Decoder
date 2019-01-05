@@ -13,9 +13,9 @@ An RC receiver signal decoder using an [AVR ATTINY85 microcontroller](https://ww
   - The pins for receiver and LED can be configured by the corresponding macros (RC_RECEIVER_PORT, LED_PORT). Do not use VCC, GND and RESET pins
   - Oscillator calibration:
     - The factory calibration for one specific ATTINY85 was 148 (0x94 read from chip via ATMEL STUDIO "Device Programming")
-    - This setup gave a measured frequency of 8,196MHz which is slightly more than 2% off the target speed
+    - This setup gave a measured frequency of 8.196MHz which is slightly more than 2% off the target speed
     - Using the OSCCAL register the clock speed can be calibrated
-    - The code currently uses *OSCCAL = 142;* which resulted in 7,96MHz and peaks of 8MHz
+    - The code currently uses *OSCCAL = 142;* which resulted in 7.96MHz and peaks of 8MHz
 
 ## Example Breadboard Configuration
 
