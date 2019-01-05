@@ -6,3 +6,5 @@ Fritzing_Layout.fzz
 ATTINY85_RC_Receiver.atsln
 ATTINY85_RC_Receiver.componentinfo.xml
 ATTINY85_RC_Receiver.cproj
+servo_pwm_decode_joerg_wunsch_modified.c
+servo_pwm_decode_joerg_wunsch_original.c
