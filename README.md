@@ -2,14 +2,14 @@
 
 [![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://en.wikipedia.org/wiki/MIT_License)
 
-An RC receiver signal decoder using an [AVR ATTINY85 microcontroller](https://www.microchip.com/wwwproducts/en/ATtiny85). The decoder uses half of the 8-bit resolution for the 1ms between minimum (1ms) and maximum (2ms) RC receiver pulse.
+An RC receiver signal decoder using an [AVR ATTINY85 microcontroller](https://www.microchip.com/wwwproducts/en/ATtiny85). The decoder has a 10-bit resolution for the RC receiver pulse (1ms-2ms).
 
 ## Features
   - To resolve the PWM pulse pin change interrupts are used to be able to do timing between rising and falling edge of the RC receiver signal
-  - Timer1 is used with a prescaler of 64 (CK/64) which results in timesteps of 8 microseconds. Thus, for the 2 milliseconds pulse 250 steps are available
-  - Since the signal operates only within half of that period the resulting resolution is approx. half of the 8-bit (modern RC controllers operate at 12-bit stick resolution, so still some work needs to be done here)
+  - Timer1 is used with a prescaler of 8 (CK/8) which results in timesteps of 1 microseconds. Thus, for the full 2ms pulse 2000 steps are available
+  - 10-bit resolution (modern RC controllers operate at 12-bit stick resolution). The code should work also without prescaler (at 8MHz) which would be roughly a 13-bit resolution (not tested yet)
   - An LED attached to LED_PORT indicates the RC control stick position (use a 200&Omega; resistor for the LED)
-    - The function *LED_Control(60)* would light the LED if RC control stick of the corresponding channel is at 60% or more
+    - The function *LED_Control(60)* would light the LED if the RC control stick of the corresponding channel is at 60% or more
   - The pins for receiver and LED can be configured by the corresponding macros (RC_RECEIVER_PORT, LED_PORT). Do not use VCC, GND and RESET pins
   - Oscillator calibration:
     - The factory calibration for one specific ATTINY85 was 148 (0x94 read from chip via ATMEL STUDIO "Device Programming")
