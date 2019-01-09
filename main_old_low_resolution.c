@@ -1,10 +1,10 @@
 /*
- * ATTINY85_RC_Receiver_1.c
+ * ATTINY85_RC_Receiver.c
  *
- * Created: 05.01.2019 14:07:15
- * Author : Andreas Ennemoser
+ * Created: 01.01.2019 20:06:29
+ * Author : Andreas
  * Description: Read and interpret signals from RC Receivers
-*/ 
+ */ 
 
 // the clock speed on ATTINY85 is approx. 8MHz
 // if fuse CKDIV8 is set (factory default), a prescaler of 8 is used which results in a 1MHz clock
@@ -23,16 +23,14 @@
 // includes
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <util/atomic.h>
+
 
 // *****************************
 // ***** global variables ******
 // *****************************
 
-volatile uint8_t pwm_ready = 0;
-volatile uint16_t pwm_duty_cycle;
+volatile uint8_t pulse_ready = 1;
 volatile uint8_t count;
-volatile uint8_t overflows = 0;
 
 #define LED_PORT PB4
 #define RC_RECEIVER_PORT PB0
@@ -70,23 +68,23 @@ void Init_PORT(void) {
 void Init_INTERRUPTS(){
     
     // this function initializes the interrupts
-    GIMSK |= (1 << PCIE);                    // Pin Change Interrupt Enable (datasheet page 51)
+    
     PCMSK |= (1 << PCINT0);                  // Pin Change Enable Mask for PB0 (pin 5) (datasheet page 52)
     
     sei();                                   // enable interrupts (MANDATORY)
 
 }
 
-void LED_Control(uint16_t pwm_duty_cycle, float position){
+void LED_Control(float position){
     
     // this function switches the LED on depending on RC signal
     // position variable indicates 0%-100% stick position
     
     float loc;
 
-    loc = 1000 + position / 100 * 1000;
+    loc = position / 100 * 125;
     
-    if ( pwm_duty_cycle >= (int)loc ) {
+    if ( count - 125 >= (int)loc ) {
         LED_ON;
     }
     else {
@@ -94,11 +92,9 @@ void LED_Control(uint16_t pwm_duty_cycle, float position){
     }
 }
 
+
 int main(void)
 {
-    
-    uint8_t local_overflows;
-    uint8_t local_count;
 
     Calibrate_OSCILLATOR();
     Init_PORT();
@@ -106,22 +102,15 @@ int main(void)
 
     while (1)
     {
-        
-        ATOMIC_BLOCK(ATOMIC_RESTORESTATE){
-            local_overflows = overflows;
-            local_count = count;
-        }
                 
-        if ( pwm_ready ) {
-            pwm_duty_cycle = local_overflows * 256 + local_count;
-            // pwm_duty_cycle = overflows * 256 + count;
+        if ( pulse_ready) {
+            
+            pulse_ready = 0;
 
-            LED_Control(pwm_duty_cycle, 25);
+            LED_Control(10);                 // percent RC stick when LED shall switched on
             
-            GIFR = (1 << PCIF);              // clear Pin Change Interrupt Flag (NOTE: correct way to clear an interrupt; do NOT use "|=" )
+            GIFR = (1 << PCIF);              // clear Pin Change Interrupt Flag  (datasheet page 52)
             GIMSK |= (1 << PCIE);            // Pin Change Interrupt Enable (datasheet page 51)
-            
-            pwm_ready = 0;
 
         }
 
@@ -131,40 +120,25 @@ int main(void)
 ISR(PCINT0_vect){
 
     // interrupt service routine for pin change interrupt
-    
-      uint8_t tcnt1;
+
+    // if PINB is HIGH, a rising edge interrupt has happened
+    // if PINB is LOW, a falling edge interrupt has happened
 
     if ( RISING_EDGE ){       // check if rising edge pin change interrupt (beginning of servo pulse)
         
         TCNT1 = 0;                           // reset counter
-        overflows = 0;                       // reset overflows;
-
-        TIMSK |= (1 << TOIE1);               // Timer/Counter1 Overflow Interrupt Enable
-        TIFR = (1 << TOV1);                  // clear timer interrupt overflow flag (NOTE: correct way to clear an interrupt; do NOT use "|=" )
-
-        TCCR1 |= (1 << CS12);                // start timer1 with prescaler CK/8 --> dt = 1us --> 1000 steps/ms
+        TCCR1 = (1 << CS12) | (1 << CS11) | (1 << CS10);   // start timer1 with prescaler CK/64 --> 250 steps per 2ms
         
-        return; 
+        return;
+        
     }
 
     // only reached when falling edge detected (end of servo pulse)
-
-    TIMSK &= ~(1 << TOIE1);                  // disable Timer/Counter1 Overflow Interrupt
-
-    tcnt1 = TCNT1;                           // take timer value to local variable
-    TCCR1 &= ~(1 << CS12);                   // stop timer (clear ALL clock select bits; since here only CS12 was active, we reset only this one)
-
-    GIMSK &= ~(1 << PCIE);                   // disable Pin Change Interrupt
-
-    TIFR = (1 << TOV1);                      // clear timer interrupt overflow flag (NOTE: correct way to clear an interrupt; do NOT use "|=" )
+    count = TCNT1;                           // take timer value to local variable
+    TCCR1 = 0;                               // stop timer
+    GIMSK &= ~(1 << PCIE);                   // Pin Change Interrupt Disable (datasheet page 51)
     
-    count = tcnt1;
-    pwm_ready = 1;
+    pulse_ready=1;
 
 }
 
-ISR(TIMER1_OVF_vect){
-        
-        overflows++;
-        
-}
