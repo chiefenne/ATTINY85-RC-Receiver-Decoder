@@ -5,7 +5,7 @@
 An RC receiver signal decoder using an [AVR ATTINY85 microcontroller](https://www.microchip.com/wwwproducts/en/ATtiny85). The decoder has a 10-bit resolution for the RC receiver pulse (1ms-2ms).
 
 ## Features
-  - To resolve the PWM pulse pin change interrupts are used to be able to do timing between rising and falling edge of the RC receiver signal
+  - To resolve the PWM pulse, pin change interrupts are used to be able to do timing between rising and falling edge of the RC receiver signal
   - Timer1 is used with a prescaler of 8 (CK/8) which results in timesteps of 1 microseconds. Thus, for the full 2ms pulse 2000 steps are available
   - 10-bit resolution (modern RC controllers operate at 12-bit stick resolution). The code should work also without prescaler (at 8MHz) which would be roughly a 13-bit resolution (not tested yet)
   - An LED attached to LED_PORT indicates the RC control stick position (use a 200&Omega; resistor for the LED)
