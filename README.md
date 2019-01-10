@@ -24,7 +24,7 @@ The typical RC servo signal is a 50 HZ PWM signal. The duty cycle is between 5% 
 ![](images/Servo_PWM_1.png)
 
 
-## Decoding signal with timer and pin change interrupts
+## Decoding the RC signal with timer and pin change interrupts
 
 The signal decoding algorithm depends on pin change interrupts and timer overflow interrupts. The signal starts whith a pin change interrupt where the signal jumps from *LOW* to *HIGH*. The the timer ist started and due to its configuration of 1 microsecond per time step it will overflow several times. This is because the timing is done for at least 1ms which results in 1000 timer steps. As the counter is 8-bit it has an overflow each 256 steps. To get the duration of the pulse the number of overflows until the next pin change interrupt (jumping from *HIGH* to *LOW*) is tracked. The total time is comosed of the number of timer overflows times 256 plus the remaining counts since the last timer overflow. For details see figure below.
 
