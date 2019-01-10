@@ -17,6 +17,16 @@ An RC receiver signal decoder using an [AVR ATTINY85 microcontroller](https://ww
     - Using the OSCCAL register the clock speed can be calibrated
     - The code currently uses *OSCCAL = 142;* which resulted in 7.96MHz and peaks of 8MHz
 
+## Servo PWM signal
+
+![](images/Servo_PWM_1.png)
+
+
+## Decoding signal with timer and pin change interrupts
+
+![](images/Servo_PWM_3.png)
+
+
 ## Example Breadboard Configuration
 
 Obviously, before use, the code **main.c** needs to be programmed on the device via any ISP programmer.
