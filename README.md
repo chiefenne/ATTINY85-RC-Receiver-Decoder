@@ -19,7 +19,7 @@ An RC receiver signal decoder using an [AVR ATTINY85 microcontroller](https://ww
 
 ## RC Servo PWM signal
 
-The typical RC servo signal is a 50 HZ PWM signal. The duty cycle is between 5% (1 ms) and 10% (2 ms) with respect to this 50 Hz (20 ms). These are *standard* values which can vary depending on the servo type. The servo electronics does not react directly on the duty cycle in percent, the frequency is allowed to deviate a lot. In the servo reacts on the duration of the pulse only, i.e. the time where the signal is *HIGH*. This time normally varies between 1ms and 2ms, which also represents the minimum and maximum rotation angle of the servo. Thus, a duration of 1.5ms denotes the servo center position. As mentioned these are the *standard* values, so some servos can deviate from that. Most radio-controllers send exatly those 1ms to 2ms pulses.
+The typical RC servo signal is a 50 HZ PWM signal. The duty cycle is between 5% (1 ms) and 10% (2 ms) with respect to this 50 Hz (20 ms). These are *standard* values which can vary depending on the servo type. The servo electronics does not react directly on the duty cycle in percent, the frequency is allowed to deviate a lot. The servo reacts on the duration of the pulse only, i.e. the time where the signal is *HIGH*. This time normally varies between 1ms and 2ms, which also represents the minimum and maximum rotation angle of the servo. Thus, a duration of 1.5ms denotes the servo center position. As mentioned these are the *standard* values, so some servos can deviate from that. Most radio-controllers send exatly those 1ms to 2ms pulses.
 
 ![](images/Servo_PWM_1.png)
 
