@@ -39,14 +39,19 @@ Obviously, before use, the code **main.c** needs to be programmed on the device 
 
 ![](images/Fritzing_Layout.png)
 
-## Prerequisites
+## Prerequisites (fuse setting)
  - For the code to work the CPU needs to run at 8 MHz (this is NOT the factory default)
  - The fuse **CKDIV8** has to be unset, otherwise the CPU would run at 1 MHz
+ - Several approaches can be used to set the fuses (see blow)
+
+ ### Set Fuses via ATMEL Studio
 
 <!--- HTML code used in order to be able to resize image -->
 <img src="images/Fuse_Settings.png" alt="drawing" width="600"/>
 
 **Setting of fuses in ATMEL Studio 7 - CKDIV8 unchecked for 8 MHz clock speed**
+
+ ### Set Fuses via ***AVRDUDE***
 
 Alternatively, the fuses can be set via command line using ***avrdude***, which is also part of the *ARDUINO IDE* installation. If the *ARDUINO IDE* is installed, you find it in the following path:
 
@@ -79,6 +84,8 @@ C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\avrdude.exe
 -U lfuse:w:0xE2:m  # set the low fuse to 0xE2
 -v
 ~~~
+
+### Set Fuses via the ***ARDUINO IDE***
 
 The last alternative is to go directly via the *ARDUINO IDE*. This requires an ATTINY core like [this one](https://github.com/damellis/attiny) installed in the IDE. Then select *ATTINY85* from the boards and also 8MHz clock speed. After that burn the bootloader.
 
