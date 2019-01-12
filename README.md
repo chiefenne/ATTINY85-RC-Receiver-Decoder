@@ -42,7 +42,7 @@ Obviously, before use, the code **main.c** needs to be programmed on the device 
 ## Prerequisites (fuse setting)
  - For the code to work the CPU needs to run at 8 MHz (this is NOT the factory default)
  - The fuse **CKDIV8** has to be unset, otherwise the CPU would run at 1 MHz
- - Several approaches can be used to set the fuses (see blow)
+ - Several approaches can be used to set the fuses (see below)
 
  ### Set Fuses via ATMEL Studio
 
