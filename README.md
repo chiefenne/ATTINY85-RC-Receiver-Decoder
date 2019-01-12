@@ -54,7 +54,7 @@ Alternatively, the fuses can be set via command line using ***avrdude***, which 
 C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\avrdude.exe
 ~~~
 
-To get the right settings for the fuses, tools like [engbedded](http://www.engbedded.com/fusecalc) are very helpful. A typical setting for the fuses would be:
+To get the right settings for the fuses, tools like the [Engbedded Atmel AVR® Fuse Calculator](http://www.engbedded.com/fusecalc) are very helpful. A typical setting for the fuses would be:
 
 ~~~
 LOW:       0x62
@@ -68,7 +68,7 @@ To disable the default *CKDIV8* fuse (which would result in 1MHz clock speed) th
 LOW:       0xE2
 ~~~
 
-Following *avrdude* command does that (for better readability the command is split onto multiple lines):
+Following ***avrdude*** command does that (for better readability the command is split onto multiple lines):
 
 ~~~
 C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\avrdude.exe
