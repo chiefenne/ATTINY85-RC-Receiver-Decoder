@@ -48,6 +48,40 @@ Obviously, before use, the code **main.c** needs to be programmed on the device 
 
 **Setting of fuses in ATMEL Studio 7 - CKDIV8 unchecked for 8 MHz clock speed**
 
+Alternatively, the fuses can be set via command line using ***avrdude***, which is also part of the *ARDUINO IDE* installation. If the *ARDUINO IDE* is installed, you find it in the following path:
+
+~~~
+C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\avrdude.exe
+~~~
+
+To get the right settings for the fuses tools like [engbedded](http://www.engbedded.com/fusecalc) are very helpful. A typical setting for the fuses would be:
+
+~~~
+LOW:       0x62
+HIGH:      0xDF
+EXTENDED:  0xFF
+~~~
+
+To disable the default *CKDIV8* fuse which lead to 1MHz clock speed the low fuse has to be set to:
+
+~~~
+LOW:       0xE2
+~~~
+
+Following *avrdude* command does that (for better readability the command is split onto multiple lines):
+
+~~~
+C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\avrdude.exe
+-p t85         # for ATTINY85
+-c stk500      # for an STK500 compatible programmer (e.g. DIAMEX or ARDUINO as ISP)
+-P COM5        # port where the programmer is connected (check COM port in the Windows device manager)
+-C "c:\Program Files (x86)\Arduino\hardware\tools\avr\etc\avrdude.conf"  # avrdude configuration file
+-U lfuse:w:0xE2:m  # set the low fuse to 0xE2
+-v
+~~~
+
+The last alternative is to go directly via the *ARDUINO IDE*. This requires an ATTINY core like [this one](https://github.com/damellis/attiny) installed in the IDE. Then select *ATTINY85* from the boards and also 8MHz clock speed. After that burn the bootloader.
+
 ## Additional information
  - Official MICROCHIP [ATTINY85 datasheet](http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-2586-AVR-8-bit-Microcontroller-ATtiny25-ATtiny45-ATtiny85_Datasheet.pdf)
 
